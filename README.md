@@ -2,7 +2,7 @@ markdown
 # Task Manager
 
 ## Author
-* Your Name
+* Eyob Zemicael
 
 ## Purpose
 A web-based Task Manager built to log, view, and store daily tasks. This submission forms the base application structure for Sprint 1.
