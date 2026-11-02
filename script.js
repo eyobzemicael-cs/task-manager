@@ -1,11 +1,15 @@
+
 // Get HTML elements
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list');
 const errorMessage = document.getElementById('error-message');
 
-// Display tasks
-function renderTasks(tasks) {
+// Load saved tasks from LocalStorage
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+// Display tasks on the screen
+function renderTasks() {
     taskList.innerHTML = '';
 
     if (tasks.length === 0) {
@@ -21,30 +25,34 @@ function renderTasks(tasks) {
     });
 }
 
-// Temporary task storage
-let tasks = [];
-
-// Handle Add Task button
+// Handle Add Task form submission
 taskForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const taskText = taskInput.value.trim();
 
+    // Validate task input
     if (taskText === '') {
-        errorMessage.textContent = 'Please enter a task.';
+        errorMessage.textContent =
+            'Error: Task title cannot be empty or only spaces.';
         errorMessage.classList.remove('hidden');
         return;
     }
 
+    // Clear error message
     errorMessage.classList.add('hidden');
 
+    // Add task and save it
     tasks.push(taskText);
 
-    renderTasks(tasks);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 
+    // Update the application
     taskInput.value = '';
     taskInput.focus();
+
+    renderTasks();
 });
 
-// Display initial empty message
-renderTasks(tasks);
+// Display saved tasks when application loads
+renderTasks();
