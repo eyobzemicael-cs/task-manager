@@ -1,0 +1,12 @@
+text
+# Ignore local operating system temporary files
+.DS_Store
+Thumbs.db
+
+# Ignore local operating system temporary files
+.DS_Store
+Thumbs.db
+
+# Ignore local environment and editor files
+.env
+.vscode/
