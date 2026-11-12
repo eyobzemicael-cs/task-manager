@@ -1,16 +1,16 @@
-
 // Get HTML elements
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list');
 const errorMessage = document.getElementById('error-message');
 
-// Load saved tasks from LocalStorage
-let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+// Inject browser localStorage into TaskService (Dependency Inversion)
+const taskService = new TaskService(window.localStorage);
 
-// Display tasks on the screen
+// Display tasks on the screen (Single Responsibility: DOM rendering only)
 function renderTasks() {
     taskList.innerHTML = '';
+    const tasks = taskService.getAllTasks();
 
     if (tasks.length === 0) {
         taskList.innerHTML =
@@ -20,7 +20,29 @@ function renderTasks() {
 
     tasks.forEach(function(task) {
         const li = document.createElement('li');
-        li.textContent = task;
+        li.className = 'task-item' + (task.completed ? ' completed' : '');
+
+        const leftContainer = document.createElement('div');
+        leftContainer.className = 'task-left';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'task-checkbox';
+        checkbox.checked = task.completed;
+        checkbox.setAttribute('aria-label', `Mark "${task.text}" as completed`);
+
+        checkbox.addEventListener('change', function() {
+            taskService.toggleTaskCompletion(task.id);
+            renderTasks();
+        });
+
+        const span = document.createElement('span');
+        span.className = 'task-text';
+        span.textContent = task.text;
+
+        leftContainer.appendChild(checkbox);
+        leftContainer.appendChild(span);
+        li.appendChild(leftContainer);
         taskList.appendChild(li);
     });
 }
@@ -29,29 +51,16 @@ function renderTasks() {
 taskForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const taskText = taskInput.value.trim();
-
-    // Validate task input
-    if (taskText === '') {
-        errorMessage.textContent =
-            'Error: Task title cannot be empty or only spaces.';
+    try {
+        taskService.addTask(taskInput.value);
+        errorMessage.classList.add('hidden');
+        taskInput.value = '';
+        taskInput.focus();
+        renderTasks();
+    } catch (error) {
+        errorMessage.textContent = `Error: ${error.message}`;
         errorMessage.classList.remove('hidden');
-        return;
     }
-
-    // Clear error message
-    errorMessage.classList.add('hidden');
-
-    // Add task and save it
-    tasks.push(taskText);
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    // Update the application
-    taskInput.value = '';
-    taskInput.focus();
-
-    renderTasks();
 });
 
 // Display saved tasks when application loads
