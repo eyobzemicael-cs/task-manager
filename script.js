@@ -1,20 +1,24 @@
-// Get HTML elements
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list');
 const errorMessage = document.getElementById('error-message');
+const filterButtons = document.querySelectorAll('.filter-btn');
 
-// Inject browser localStorage into TaskService (Dependency Inversion)
 const taskService = new TaskService(window.localStorage);
+let currentFilter = 'all';
 
-// Display tasks on the screen (Single Responsibility: DOM rendering only)
+function getEmptyStateMessage(filterName) {
+    if (filterName === 'active') return 'No active tasks remaining.';
+    if (filterName === 'completed') return 'No completed tasks yet.';
+    return 'No tasks found. Add a task to get started!';
+}
+
 function renderTasks() {
     taskList.innerHTML = '';
-    const tasks = taskService.getAllTasks();
+    const tasks = taskService.getFilteredTasks(currentFilter);
 
     if (tasks.length === 0) {
-        taskList.innerHTML =
-            '<li class="empty-message">No tasks found. Add a task to get started!</li>';
+        taskList.innerHTML = `<li class="empty-message">${getEmptyStateMessage(currentFilter)}</li>`;
         return;
     }
 
@@ -47,7 +51,15 @@ function renderTasks() {
     });
 }
 
-// Handle Add Task form submission
+filterButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        currentFilter = button.dataset.filter;
+        filterButtons.forEach((btn) => btn.classList.remove('active'));
+        button.classList.add('active');
+        renderTasks();
+    });
+});
+
 taskForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -63,5 +75,4 @@ taskForm.addEventListener('submit', function(event) {
     }
 });
 
-// Display saved tasks when application loads
 renderTasks();

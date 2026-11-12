@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager - Sprint 1</title>
+    <title>Task Manager</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <h1>Task Manager</h1>
         
-        <!-- Task Entry Form (US-01) -->
         <form id="task-form">
             <div class="input-group">
                 <input type="text" id="task-input" placeholder="What needs to be done?" autocomplete="off">
                 <button type="submit">Add Task</button>
             </div>
-            <!-- Error Message Location (US-01) -->
             <p id="error-message" class="hidden"></p>
         </form>
 
-        <!-- Task List View (US-03) -->
         <div class="list-container">
-            <h2>Your Tasks</h2>
+            <div class="list-header">
+                <h2>Your Tasks</h2>
+                <div class="filter-group" role="group" aria-label="Filter tasks">
+                    <button type="button" class="filter-btn active" data-filter="all">All</button>
+                    <button type="button" class="filter-btn" data-filter="active">Active</button>
+                    <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+            </div>
             <ul id="task-list"></ul>
         </div>
     </div>
