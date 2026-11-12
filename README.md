@@ -1,39 +1,52 @@
-markdown
 # Task Manager
 
 ## Author
-* Eyob Zemicael
+- Eyob Zemicael
 
 ## Purpose
-A web-based Task Manager built to log, view, and store daily tasks. This submission forms the base application structure for Sprint 1.
+A web-based Task Manager built to log, view, complete, filter, and delete daily tasks. Sprint 2 expands the Sprint 1 foundation with interactive task management, SOLID architecture (`TaskService` with dependency injection and Open/Closed filter strategies), and automated unit tests.
 
 ## Technologies Used
-* HTML5
-* CSS3
-* Vanilla JavaScript (ES6)
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6)
+- Node.js built-in test runner (`node:test`)
 
 ## Prerequisites
-* Any modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari).
+- Any modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari).
+- **Node.js (v18+)** to run the automated test suite from the terminal.
 
 ## Installation & Configuration
-No special installation or local server environment variables are needed for this client-side application.
-1. Download or clone this repository folder onto your local computer.
+No external npm packages or environment variables are required.
+
+1. Clone this repository onto your local machine:
+   ```bash
+   git clone https://github.com
+   cd task-manager
+   ```
 
 ## Running the Application
 1. Navigate into the root project directory.
-2. Double-click the `index.html` file to open it directly in your web browser.
+2. Open `index.html` directly in your web browser (or run `open index.html` on macOS).
 
-## Trying the Sprint 1 Functionality
-1. Type a task title into the text box and click the **Add Task** button. You will see it render instantly in your task list.
-2. Try clicking the button without entering text to observe validation enforcement.
-3. Reload the browser page to confirm that your tasks persist perfectly via LocalStorage.
+## Running Automated Tests
+From the root project directory (`task-manager/`), run:
+```bash
+npm test
+```
+This executes all unit tests in `tests/taskService.test.js` using Node's built-in test runner.
 
+## Trying the Functionality
+### Sprint 1 Core Features
+1. Type a task title into the text box and click **Add Task** to render it immediately in your list.
+2. Submit an empty or whitespace-only input to observe validation error handling.
+3. Reload the browser page to confirm tasks persist via `localStorage`.
 
-## 4. Manual Testing Matrix
+### Sprint 2 New Features
+1. **Mark Tasks Completed (US-04):** Click the checkbox next to any task to mark it completed (highlighted in green with strikethrough text) or uncheck it to return it to active status. Reload the page to confirm completion status persists.
+2. **Filter Tasks by Status (US-05):** Click **All**, **Active**, or **Completed** above the task list to filter displayed tasks dynamically.
+3. **Delete Tasks (US-06):** Click the red **Delete** button on any task row to remove it permanently from the list and `localStorage`.
 
-| Test ID | User Story | Scenario Description | Expected Result | Actual Result | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **TC-01** | US-01 | Submit an empty task input field. | Red error message appears; no task is added to the list. | Red error message displays exactly as expected. | **PASSED** |
-| **TC-02** | US-01 | Submit an input with spaces only (`"   "`). | Input is trimmed, treated as empty, and error message triggers. | Whitespace rejected; error message displays. | **PASSED** |
-| **TC-03** | US-01 / 03 | Submit a valid task name (e.g., `"Complete Sprint 1"`). | Task is added to UI instantly; input field clears out cleanly. | Task shows up instantly; text box clears. | **PASSED** |
-| **TC-04** | US-02 | Add a task, then reload/refresh the browser page. | The task persists and stays visible on screen after load. | Task persists perfectly from local storage. | **PASSED** |
+## Known Limitations
+- Data is stored locally in the browser's `localStorage`, so tasks do not sync across different browsers or devices.
+- Deleting a task happens immediately without an undo prompt.

@@ -67,6 +67,17 @@ class TaskService {
         this._saveTasks();
         return task;
     }
+
+    deleteTask(taskId) {
+        const index = this.tasks.findIndex((t) => t.id === taskId);
+        if (index === -1) {
+            throw new Error('Task not found.');
+        }
+
+        const [deleted] = this.tasks.splice(index, 1);
+        this._saveTasks();
+        return deleted;
+    }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
