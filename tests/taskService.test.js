@@ -63,3 +63,23 @@ test('US-04: toggleTaskCompletion throws an error for an invalid task ID', () =>
 
     assert.throws(() => service.toggleTaskCompletion('non-existent-id'), /Task not found/);
 });
+
+test('US-05: getFilteredTasks returns all, active, and completed tasks accurately', () => {
+    const storage = createFakeStorage();
+    const service = new TaskService(storage);
+
+    const t1 = service.addTask('Active task 1');
+    const t2 = service.addTask('Completed task 2');
+    service.toggleTaskCompletion(t2.id);
+
+    assert.equal(service.getFilteredTasks('all').length, 2);
+    assert.deepEqual(service.getFilteredTasks('active').map((t) => t.id), [t1.id]);
+    assert.deepEqual(service.getFilteredTasks('completed').map((t) => t.id), [t2.id]);
+});
+
+test('US-05: getFilteredTasks rejects an unsupported filter name', () => {
+    const storage = createFakeStorage();
+    const service = new TaskService(storage);
+
+    assert.throws(() => service.getFilteredTasks('archived'), /Invalid filter/);
+});
