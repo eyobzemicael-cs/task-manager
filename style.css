@@ -87,3 +87,32 @@ li {
     font-style: italic;
     padding: 10px 0;
 }
+li.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.task-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+li.task-item.completed {
+    border-left-color: #28a745;
+    background: #eef7f0;
+}
+
+li.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: #6c757d;
+}
