@@ -83,3 +83,25 @@ test('US-05: getFilteredTasks rejects an unsupported filter name', () => {
 
     assert.throws(() => service.getFilteredTasks('archived'), /Invalid filter/);
 });
+
+test('US-06: deleteTask removes an existing task and persists changes', () => {
+    const storage = createFakeStorage();
+    const service = new TaskService(storage);
+
+    const t1 = service.addTask('Task to keep');
+    const t2 = service.addTask('Task to delete');
+
+    const deleted = service.deleteTask(t2.id);
+    assert.equal(deleted.id, t2.id);
+    assert.equal(service.getAllTasks().length, 1);
+
+    const reloadedService = new TaskService(storage);
+    assert.deepEqual(reloadedService.getAllTasks().map((t) => t.id), [t1.id]);
+});
+
+test('US-06: deleteTask throws an error when task ID does not exist', () => {
+    const storage = createFakeStorage();
+    const service = new TaskService(storage);
+
+    assert.throws(() => service.deleteTask('missing-id'), /Task not found/);
+});
