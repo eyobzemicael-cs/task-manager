@@ -1,7 +1,14 @@
+const FILTER_STRATEGIES = {
+    all: () => true,
+    active: (task) => !task.completed,
+    completed: (task) => task.completed
+};
+
 class TaskService {
-    constructor(storage, storageKey = 'tasks') {
+    constructor(storage, storageKey = 'tasks', filterStrategies = FILTER_STRATEGIES) {
         this.storage = storage;
         this.storageKey = storageKey;
+        this.filterStrategies = filterStrategies;
         this.tasks = this._loadTasks();
     }
 
@@ -23,6 +30,14 @@ class TaskService {
 
     getAllTasks() {
         return [...this.tasks];
+    }
+
+    getFilteredTasks(filterName = 'all') {
+        const strategy = this.filterStrategies[filterName];
+        if (!strategy) {
+            throw new Error(`Invalid filter: ${filterName}`);
+        }
+        return this.tasks.filter(strategy);
     }
 
     addTask(rawText) {
@@ -55,5 +70,5 @@ class TaskService {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { TaskService };
+    module.exports = { TaskService, FILTER_STRATEGIES };
 }
