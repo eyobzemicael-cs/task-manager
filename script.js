@@ -44,9 +44,21 @@ function renderTasks() {
         span.className = 'task-text';
         span.textContent = task.text;
 
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.setAttribute('aria-label', `Delete "${task.text}"`);
+
+        deleteBtn.addEventListener('click', function() {
+            taskService.deleteTask(task.id);
+            renderTasks();
+        });
+
         leftContainer.appendChild(checkbox);
         leftContainer.appendChild(span);
         li.appendChild(leftContainer);
+        li.appendChild(deleteBtn);
         taskList.appendChild(li);
     });
 }

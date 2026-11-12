@@ -154,3 +154,17 @@ li.task-item.completed .task-text {
     color: #fff;
     border-color: #007bff;
 }
+
+.delete-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
